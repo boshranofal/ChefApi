@@ -1,0 +1,6 @@
+@ChefApi.PL_HostAddress = http://localhost:5055
+
+GET {{ChefApi.PL_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

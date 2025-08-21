@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ChefApi.Controllers
+namespace ChefApi.PL.Controllers
 {
     [ApiController]
     [Route("[controller]")]

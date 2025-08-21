@@ -1,4 +1,4 @@
-namespace ChefApi
+namespace ChefApi.PL
 {
     public class WeatherForecast
     {
