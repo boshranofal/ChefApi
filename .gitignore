@@ -1,0 +1,11 @@
+# build folders
+bin/
+obj/
+
+# visual studio temporary files
+.vs/
+
+# user specific
+*.user
+*.suo
+ 
