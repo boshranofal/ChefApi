@@ -9,7 +9,7 @@ namespace ChefApi.DAL.Model
 {
     public class ApplicationUser:IdentityUser
     {
-        public string? CodeReset { get; set; }
+        public string? CodeResetPassword { get; set; }
         public DateTime? CodeResetExpiration { get; set; }
     }
 }
