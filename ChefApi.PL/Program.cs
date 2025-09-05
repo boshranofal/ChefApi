@@ -69,26 +69,37 @@ namespace ChefApi
 
             var app = builder.Build();
 
-            var scope = app.Services.CreateScope();
-            var ObjectOfSeedData = scope.ServiceProvider.GetRequiredService<ISeedData>();
-            await ObjectOfSeedData.DataSeeding();
-            await ObjectOfSeedData.IdentityDataSeeding();
-
-
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
-            app.UseHttpsRedirection();
-           
+            // Add health check endpoint
+            app.MapGet("/health", () => "Healthy");
 
+            // Use Authentication before Authorization
+            app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            // Database migration and seeding in production
+            using (var scope = app.Services.CreateScope())
+            {
+                try
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    await context.Database.MigrateAsync(); // Apply migrations automatically
+                    
+                    var seedData = scope.ServiceProvider.GetRequiredService<ISeedData>();
+                    await seedData.DataSeeding();
+                    await seedData.IdentityDataSeeding();
+                }
+                catch (Exception ex)
+                {
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+                }
+            }
 
             app.Run();
         }

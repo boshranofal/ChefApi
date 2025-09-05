@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: chefapi
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: chefapi-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: SMTP_SERVER
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: FROM_EMAIL
+        sync: false
+      - key: FROM_NAME
+        value: Chef API
+
+databases:
+  - name: chefapi-db
+    databaseName: chefapi
+    user: chefapi_user

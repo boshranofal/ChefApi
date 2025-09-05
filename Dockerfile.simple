@@ -1,0 +1,30 @@
+# Simple test Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy solution and project files
+COPY ChefApi.sln ./
+COPY ChefApi.PL/ChefApi.PL.csproj ./ChefApi.PL/
+COPY ChefApi.BLL/ChefApi.BLL.csproj ./ChefApi.BLL/
+COPY ChefApi.DAL/ChefApi.DAL.csproj ./ChefApi.DAL/
+
+# Restore packages
+RUN dotnet restore
+
+# Copy source code
+COPY . ./
+
+# Build and publish
+RUN dotnet publish ChefApi.PL/ChefApi.PL.csproj -c Release -o /app/out
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/out .
+
+# Configure app
+ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_ENVIRONMENT=Production
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "ChefApi.PL.dll"]
