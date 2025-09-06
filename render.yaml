@@ -3,29 +3,40 @@ services:
     name: chefapi
     env: docker
     dockerfilePath: ./Dockerfile
+    plan: starter
     envVars:
+      # Environment Configuration
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
-      - key: ConnectionStrings__DefaultConnection
+      
+      # Database Configuration (Render automatically provides DATABASE_URL)
+      - key: DATABASE_URL
         fromDatabase:
-          name: chefapi-db
+          name: chefapi-postgresql-db
           property: connectionString
-      - key: JWT_SECRET_KEY
+      
+      # JWT Configuration (Render generates secure key)
+      - key: JWTOptions__SecretKey
         generateValue: true
-      - key: SMTP_SERVER
+      
+      # Email Configuration (Set these in Render dashboard)
+      - key: EmailSettings__SmtpServer
         value: smtp.gmail.com
-      - key: SMTP_PORT
+      - key: EmailSettings__SmtpPort
         value: 587
-      - key: SMTP_USERNAME
-        sync: false
-      - key: SMTP_PASSWORD
-        sync: false
-      - key: FROM_EMAIL
-        sync: false
-      - key: FROM_NAME
+      - key: EmailSettings__SmtpUsername
+        sync: false  # Set manually in Render dashboard
+      - key: EmailSettings__SmtpPassword
+        sync: false  # Set manually in Render dashboard  
+      - key: EmailSettings__FromEmail
+        sync: false  # Set manually in Render dashboard
+      - key: EmailSettings__FromName
         value: Chef API
 
+    healthCheckPath: /health
+
 databases:
-  - name: chefapi-db
+  - name: chefapi-postgresql-db
     databaseName: chefapi
     user: chefapi_user
+    plan: starter

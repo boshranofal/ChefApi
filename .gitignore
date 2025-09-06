@@ -1,11 +1,51 @@
-# build folders
+# Build folders
 bin/
 obj/
 
-# visual studio temporary files
+# Visual Studio temporary files
 .vs/
+.vscode/
 
-# user specific
+# User specific files
 *.user
 *.suo
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.staging
+.env.production.local
+
+# Logs
+*.log
+logs/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package files
+*.nupkg
+packages/
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+
+# Temporary files
+*.tmp
+*.swp
+*~
  
